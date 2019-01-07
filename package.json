@@ -1,6 +1,6 @@
 {
-  "name": "markdown-it-implicit-figures",
-  "version": "0.3.2",
+  "name": "@gerhobbelt/markdown-it-implicit-figures",
+  "version": "0.3.2-1",
   "description": "Render images occurring by itself in a paragraph as `<figure><img ...></figure>`, similar to pandoc's implicit_figures",
   "license": "MIT",
   "repository": "arve0/markdown-it-implicit-figures",
@@ -10,12 +10,13 @@
     "url": "arve0.github.io"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=4"
   },
   "scripts": {
     "test": "mocha",
     "preversion": "mocha",
-    "postpublish": "git push && git push --tags"
+    "postpublish": "git push && git push --tags",
+    "pub": "npm publish --access public"
   },
   "files": [
     "index.js",
@@ -32,8 +33,8 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "markdown-it": "^6.0.4",
-    "mocha": "*"
+    "@gerhobbelt/markdown-it": "8.4.2-24",
+    "mocha": "5.2.0"
   },
   "tonicExampleFilename": "demo.js"
 }

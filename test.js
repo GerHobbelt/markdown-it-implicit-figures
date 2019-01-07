@@ -1,6 +1,6 @@
 'use strict';
 var assert = require('assert');
-var Md = require('markdown-it');
+var Md = require('@gerhobbelt/markdown-it');
 var implicitFigures = require('./');
 
 describe('markdown-it-implicit-figures', function() {
