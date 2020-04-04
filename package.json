@@ -10,7 +10,7 @@
     "url": "arve0.github.io"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=8"
   },
   "scripts": {
     "test": "mocha",
@@ -20,8 +20,12 @@
   },
   "files": [
     "index.js",
-    "demo.js"
+    "demo.js",
+    "README.md",
+    "LICENSE"
   ],
+  "type": "module",
+  "main": "index.js",
   "homepage": "https://github.com/arve0/markdown-it-implicit-figures",
   "keywords": [
     "markdown-it",
@@ -33,8 +37,8 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "@gerhobbelt/markdown-it": "8.4.2-24",
-    "mocha": "5.2.0"
+    "@gerhobbelt/markdown-it": "10.0.0-31",
+    "mocha": "7.1.1"
   },
   "tonicExampleFilename": "demo.js"
 }
