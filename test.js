@@ -2,7 +2,7 @@
 var assert = require('assert');
 var Md = require('@gerhobbelt/markdown-it');
 var implicitFigures = require('./');
-var attrs = require('markdown-it-attrs');
+var attrs = require('@gerhobbelt/markdown-it-attrs');
 
 describe('markdown-it-implicit-figures', function() {
   var md;

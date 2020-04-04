@@ -83,5 +83,5 @@ module.exports = function implicitFiguresPlugin(md, options) {
       }
     }
   }
-  md.core.ruler.before('linkify', 'implicit_figures', implicitFigures);
+  md.core.ruler.before('replacements', 'implicit_figures', implicitFigures);
 };
