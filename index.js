@@ -1,4 +1,3 @@
-'use strict';
 
 /**
  * A `markdown-it` plugin for parsing image/video/audio/link references inside
@@ -9,8 +8,8 @@
 // We can only detect video/audio files from the extension in the URL.
 // We ignore MP1 and MP2 (not in active use) and default to video for ambiguous
 // extensions (MPG, MP4)
-const validAudioExtensions = ['aac', 'm4a', 'mp3', 'oga', 'ogg', 'wav'];
-const validVideoExtensions = ['mp4', 'm4v', 'ogv', 'webm', 'mpg', 'mpeg'];
+const validAudioExtensions = [ 'aac', 'm4a', 'mp3', 'oga', 'ogg', 'wav' ];
+const validVideoExtensions = [ 'mp4', 'm4v', 'ogv', 'webm', 'mpg', 'mpeg' ];
 
 /**
  * A fork of the built-in image tokenizer which guesses video/audio files based
@@ -29,10 +28,10 @@ const validVideoExtensions = ['mp4', 'm4v', 'ogv', 'webm', 'mpg', 'mpeg'];
  */
 function tokenizeImagesAndMedia(state, silent, md) {
   let attrs, code, content, label, labelEnd, labelStart, pos, ref, res, title,
-    token, tokens, start;
+      token, tokens, start;
   let href = '',
-    oldPos = state.pos,
-    max = state.posMax;
+      oldPos = state.pos,
+      max = state.posMax;
 
   // Exclamation mark followed by open square bracket - ![ - otherwise abort
   if (state.src.charCodeAt(state.pos) !== 0x21/* ! */) { return false; }
@@ -91,15 +90,14 @@ function tokenizeImagesAndMedia(state, silent, md) {
       //                         ^^ skipping these spaces
       for (; pos < max; pos++) {
         code = state.src.charCodeAt(pos);
-        if (!md.utils.isSpace(code) && code !== 0x0A)
-          break;
+        if (!md.utils.isSpace(code) && code !== 0x0A) { break; }
       }
     } else {
       title = '';
     }
 
     // here goes link info string parsing, possibly in the future
-    
+
     if (pos >= max || state.src.charCodeAt(pos) !== 0x29 /* ) */) {
       state.pos = oldPos;
       return false;
@@ -125,8 +123,7 @@ function tokenizeImagesAndMedia(state, silent, md) {
 
     // covers label === '' and label === undefined
     // (collapsed reference link and shortcut reference link respectively)
-    if (!label)
-      label = state.src.slice(labelStart, labelEnd);
+    if (!label) { label = state.src.slice(labelStart, labelEnd); }
 
     ref = state.env.references[md.utils.normalizeReference(label)];
     if (!ref) {
@@ -156,23 +153,22 @@ function tokenizeImagesAndMedia(state, silent, md) {
 
     // html5-media changes start here! ///////////////////////////////////////
     const mediaType = guessMediaType(href);
-    const tag = (mediaType == 'image') ? 'img' : mediaType;
+    const tag = (mediaType === 'image') ? 'img' : mediaType;
 
     token = state.push(mediaType, tag, 0);
     token.attrs = attrs = [
-      ['src', href]
+      [ 'src', href ]
     ];
-    if (mediaType == 'image')
-      attrs.push(['alt', '']); // actual value is set in renderer.js
+    if (mediaType === 'image') { attrs.push([ 'alt', '' ]); } // actual value is set in renderer.js
     // html5-media changes end here! /////////////////////////////////////////
     token.children = tokens;
     token.content = content;
 
     if (title) {
-      attrs.push(['title', title]);
+      attrs.push([ 'title', title ]);
     }
   }
-  
+
   state.pos = pos;
   state.posMax = max;
   return true;
@@ -190,15 +186,14 @@ function tokenizeImagesAndMedia(state, silent, md) {
  */
 function guessMediaType(url) {
   const extensionMatch = url.match(/\.([^/.]+)(?:\?.*)?(?:#.*)?$/);
-  if (extensionMatch === null)
-    return 'image';
+  if (extensionMatch === null) { return 'image'; }
   const extension = extensionMatch[1];
-  if (validAudioExtensions.indexOf(extension.toLowerCase()) != -1)
+  if (validAudioExtensions.indexOf(extension.toLowerCase()) !== -1) {
     return 'audio';
-  else if (validVideoExtensions.indexOf(extension.toLowerCase()) != -1)
+  } else if (validVideoExtensions.indexOf(extension.toLowerCase()) !== -1) {
     return 'video';
-  else
-    return 'image';
+  }
+  return 'image';
 }
 
 /**
@@ -222,22 +217,20 @@ function guessMediaType(url) {
 function renderMedia(tokens, idx, options, env, md) {
   const token = tokens[idx];
   const type = token.type;
-  if (type !== 'video' && type !== 'audio')
-    return '';
+  if (type !== 'video' && type !== 'audio') { return ''; }
   let attrs = options.html5Media[`${type}Attrs`].trim();
-  if (attrs)
-    attrs = ' ' + attrs;
+  if (attrs) { attrs = ' ' + attrs; }
 
   // We'll always have a URL for non-image media: they are detected by URL
   const url = token.attrs[token.attrIndex('src')][1];
 
   // Title is set like this: ![descriptive text](video.mp4 "title")
-  const title = token.attrIndex('title') != -1 ?
+  const title = token.attrIndex('title') !== -1 ?
     ` title="${md.utils.escapeHtml(token.attrs[token.attrIndex('title')][1])}"` :
     '';
 
   const description = token.content ?
-    '\n' + [md.utils.escapeHtml(token.content)] :
+    '\n' + [ md.utils.escapeHtml(token.content) ] :
     '';
 
   return `<${type} src="${url}"${title}${attrs}>\n` +
@@ -257,7 +250,7 @@ function renderMedia(tokens, idx, options, env, md) {
  * @param {String} [options.audioAttrs='controls class="html5-audio-player"']
  *  attributes to include inside `<audio>` tags
  */
-module.exports = function implicitFiguresPlugin(md, options) {
+export default function implicitFiguresPlugin(md, options) {
   options = options || {};
 
   const videoAttrs = options.videoAttrs !== undefined ?
@@ -269,11 +262,11 @@ module.exports = function implicitFiguresPlugin(md, options) {
 
   function implicitFigures(state) {
     // reset tabIndex on md.render()
-    var tabIndex = 1;
+    let tabIndex = 1;
 
     // do not process first and last token
-    for (var i=1, l=state.tokens.length; i < (l - 1); ++i) {
-      var token = state.tokens[i];
+    for (let i = 1, l = state.tokens.length; i < (l - 1); ++i) {
+      let token = state.tokens[i];
 
       if (token.type !== 'inline') { continue; }
       // children: image alone, or link_open -> image -> link_close
@@ -296,23 +289,28 @@ module.exports = function implicitFiguresPlugin(md, options) {
       // Previous token is paragraph open.
       // Next token is paragraph close.
       // Lets replace the paragraph tokens with figure tokens.
-      var figure = state.tokens[i - 1];
+      let figure = state.tokens[i - 1];
       figure.type = 'figure_open';
       figure.tag = 'figure';
       state.tokens[i + 1].type = 'figure_close';
       state.tokens[i + 1].tag = 'figure';
 
-      if (options.dataType == true) {
-        state.tokens[i - 1].attrPush(['data-type', 'image']);
+      if (options.dataType === true) {
+        // if inside link, image/video is second child
+        figure = (token.children.length === 1) ? token.children[0] : token.children[1];
+        // Get data type
+        let src = figure.attrs.find(item => item[0] === 'src')[1];
+        let dataType = src.match(/(mp4|webm|ogg)$/) ? 'video' : 'image';
+        state.tokens[i - 1].attrPush([ 'data-type', dataType ]);
       }
       var image;
 
-      if (options.link == true && token.children.length === 1) {
+      if (options.link === true && token.children.length === 1) {
         image = token.children[0];
         token.children.unshift(
           new state.Token('link_open', 'a', 1)
         );
-        token.children[0].attrPush(['href', image.attrGet('src')]);
+        token.children[0].attrPush([ 'href', image.attrGet('src') ]);
         token.children.push(
           new state.Token('link_close', 'a', -1)
         );
@@ -321,28 +319,28 @@ module.exports = function implicitFiguresPlugin(md, options) {
       // for linked images, image is one off
       image = token.children.length === 1 ? token.children[0] : token.children[1];
 
-      if (options.figcaption == true) {
+      if (options.figcaption === true) {
         if (image.children && image.children.length) {
           token.children.push(
             new state.Token('figcaption_open', 'figcaption', 1)
-            );
+          );
           token.children.splice(token.children.length, 0, ...image.children);
           token.children.push(
             new state.Token('figcaption_close', 'figcaption', -1)
-            );
+          );
           image.children.length = 0;
         }
       }
 
       if (options.copyAttrs && image.attrs) {
-        const f = options.copyAttrs === true ? '' : options.copyAttrs
-        figure.attrs = image.attrs.filter(([k,v]) => k.match(f))
+        const f = options.copyAttrs === true ? '' : options.copyAttrs;
+        figure.attrs = image.attrs.filter(([ k, v ]) => k.match(f));
       }
 
-      if (options.tabindex == true) {
+      if (options.tabindex === true) {
         // add a tabindex property
         // you could use this with css-tricks.com/expanding-images-html5
-        state.tokens[i - 1].attrPush(['tabindex', tabIndex]);
+        state.tokens[i - 1].attrPush([ 'tabindex', tabIndex ]);
         tabIndex++;
       }
     }
@@ -362,4 +360,4 @@ module.exports = function implicitFiguresPlugin(md, options) {
       return renderMedia(tokens, idx, opt, env, md);
     };
 
-};
+}
