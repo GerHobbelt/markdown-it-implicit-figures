@@ -1,4 +1,4 @@
-/*! markdown-it-implicit-figures 0.9.0-5 https://github.com//GerHobbelt/markdown-it-implicit-figures @license MIT */
+/*! markdown-it-implicit-figures 0.9.0-6 https://github.com//GerHobbelt/markdown-it-implicit-figures @license MIT */
 
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
