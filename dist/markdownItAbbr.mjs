@@ -1,4 +1,4 @@
-/*! markdown-it-implicit-figures 0.9.0-6 https://github.com//GerHobbelt/markdown-it-implicit-figures @license MIT */
+/*! markdown-it-implicit-figures 0.10.0-6 https://github.com//GerHobbelt/markdown-it-implicit-figures @license MIT */
 
 function implicitFiguresPlugin(md, options) {
   options = options || {};
